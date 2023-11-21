@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import {useDrag} from 'react-dnd'
+import { useDrag } from 'react-dnd';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {ItemTypes} from './constants'
+import { ItemTypes } from './constants';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { UpdateTodo } from "./updateTodo";
@@ -23,10 +23,10 @@ function TodoCard({ data, handleDelete, handleEdit }) {
   }
 
   return (
-    <li 
-    className="bg-gray-200 p-4 m-2 rounded-md shadow-md" 
-    key={_id}
-    ref={drag}
+    <li
+      className="bg-gray-200 p-4 m-2 rounded-md shadow-md"
+      key={_id}
+      ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}
     >
       <div className="title-description">
@@ -92,38 +92,38 @@ export function ShowTodoList() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-    <section className="container mx-auto p-8">
-      <Link to="/create-todo" className="button-new">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md mb-4">
-          New
-        </button>
-      </Link>
-      <section className="contents">
-        <h1 className="text-3xl font-bold mb-4">TODO</h1>
-        <ul className="list-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {todo.map((data) => (
-            <TodoCard
-              data={data}
-              key={data._id}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-            />
-          ))}
-        </ul>
-      </section>
-      {open && (
-        <section className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="update-container">
-            <div className="update-contents bg-white p-4 rounded-md">
-              <p onClick={handleClose} className="close text-right text-3xl cursor-pointer">
-                &times;
-              </p>
-              <UpdateTodo _id={id} handleClose={handleClose} handleEdited={handleUpdate} />
-            </div>
-          </div>
+      <section className="container mx-auto p-8">
+        <Link to="/create-todo" className="button-new">
+          <button className="bg-green-500 text-white px-4 py-2 rounded-md mb-4">
+            New
+          </button>
+        </Link>
+        <section className="contents">
+          <h1 className="text-3xl font-bold mb-4">TODO</h1>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {todo.map((data) => (
+              <TodoCard
+                data={data}
+                key={data._id}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
+            ))}
+          </ul>
         </section>
-      )}
-    </section>
+        {open && (
+          <section className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+            <div className="update-container">
+              <div className="update-contents bg-white p-4 rounded-md">
+                <p onClick={handleClose} className="close text-right text-3xl cursor-pointer">
+                  &times;
+                </p>
+                <UpdateTodo _id={id} handleClose={handleClose} handleEdited={handleUpdate} />
+              </div>
+            </div>
+          </section>
+        )}
+      </section>
     </DndProvider>
   );
 }
