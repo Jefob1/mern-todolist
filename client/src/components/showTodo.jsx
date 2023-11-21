@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import {useDrag} from 'react-dnd'
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import {ItemTypes} from './constants'
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { UpdateTodo } from "./updateTodo";
@@ -6,12 +10,25 @@ import { UpdateTodo } from "./updateTodo";
 function TodoCard({ data, handleDelete, handleEdit }) {
   const { _id, title, description } = data;
 
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: ItemTypes.TODO_CARD,
+    item: { id: _id },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   function onDelete() {
     handleDelete(_id);
   }
 
   return (
-    <li className="bg-gray-200 p-4 m-2 rounded-md shadow-md" key={_id}>
+    <li 
+    className="bg-gray-200 p-4 m-2 rounded-md shadow-md" 
+    key={_id}
+    ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}
+    >
       <div className="title-description">
         <h3 className="text-xl font-bold mb-2">{title}</h3>
         <p className="text-gray-700">{description}</p>
@@ -74,6 +91,7 @@ export function ShowTodoList() {
   }
 
   return (
+    <DndProvider backend={HTML5Backend}>
     <section className="container mx-auto p-8">
       <Link to="/create-todo" className="button-new">
         <button className="bg-green-500 text-white px-4 py-2 rounded-md mb-4">
@@ -106,5 +124,6 @@ export function ShowTodoList() {
         </section>
       )}
     </section>
+    </DndProvider>
   );
 }
